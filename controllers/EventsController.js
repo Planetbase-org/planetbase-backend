@@ -12,6 +12,7 @@ exports.createEvent = async (req, res) => {
     eventTags,
     numberOfGuests,
     eventLocation,
+    sponsorshipPackage,
     scheduledDate,
   } = req.body;
   try {
@@ -48,6 +49,18 @@ exports.createEvent = async (req, res) => {
 exports.getEvents = async (req, res) => {
   const events = await EventsModel.find({}).sort({ createdAt: -1 });
   res.json({ events });
+};
+
+//Get organizers events
+exports.getOrganizerEvents = async (req, res) => {
+  const id = req.params.id;
+  const organizerId = await OrganizerModel.findOne({ _id: id });
+  // try {
+  const events = await EventsModel.find({ organizerId });
+  res.json({ events });
+  // } catch (err) {
+  //   res.json({ err });
+  // }
 };
 
 //PUT update an event
