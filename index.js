@@ -6,7 +6,7 @@ const router = require("./routes/AuthRoutes");
 const eventsRouter = require("./routes/EventsRoute");
 const companyRouter = require("./routes/CompanyAuthRoute");
 const bidRouter = require("./routes/BidEventRoute");
-require("dotenv").config({ path: "./config.env" });
+require("dotenv").config();
 
 //Middleware
 app.use(cors());
