@@ -19,13 +19,10 @@ app.use("/api/auth/company", companyRouter);
 app.use("/api/bid-event", bidRouter);
 
 mongoose
-  .connect(
-    "mongodb+srv://planetbase:Planetbase123@cluster0.532ph90.mongodb.net/planetbase?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     app.listen(process.env.PORT || 7000, () => {
       console.log(`Server connected at port ${process.env.PORT || 7000}`);
