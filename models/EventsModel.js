@@ -2,49 +2,49 @@ const mongoose = require("mongoose");
 const EventSchema = new mongoose.Schema(
   {
     organizerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organizer",
+      type: String,
+      requied: true,
     },
-    events: [
-      {
-        eventTitle: {
-          type: String,
-          default: "",
-        },
-        eventType: {
-          type: String,
-          default: "",
-        },
-        eventOrganizer: {
-          type: String,
-          default: "",
-        },
-        eventTags: {
-          type: Array,
-          default: "",
-        },
-        numberOfGuests: {
-          type: String,
-          default: "",
-        },
-        eventLocation: {
-          type: String,
-          default: "",
-        },
-        sponsorshipPackage: {
-          type: String,
-          default: "",
-        },
-        scheduledDate: {
-          type: String,
-          default: "",
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+    eventTitle: {
+      type: String,
+      required: true,
+    },
+    eventType: {
+      type: String,
+      required: true,
+    },
+    eventOrganizer: {
+      type: String,
+      required: true,
+    },
+    eventTags: {
+      type: Array,
+      required: true,
+    },
+    numberOfGuests: {
+      type: String,
+      required: true,
+    },
+    eventLocation: {
+      type: String,
+      required: true,
+    },
+    sponsorshipPackage: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    scheduledDate: {
+      type: String,
+      required: true,
+    },
+    eventImage: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
