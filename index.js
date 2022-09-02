@@ -7,6 +7,7 @@ const router = require("./routes/AuthRoutes");
 const eventsRouter = require("./routes/EventsRoute");
 const companyRouter = require("./routes/CompanyAuthRoute");
 const bidRouter = require("./routes/BidEventRoute");
+const paymentRouter = require("./routes/PaymentRoute");
 
 //Middleware
 app.use(cors());
@@ -17,6 +18,7 @@ app.use("/api/auth", router);
 app.use("/api/events", eventsRouter);
 app.use("/api/auth/company", companyRouter);
 app.use("/api/bid-event", bidRouter);
+app.use("/api/payment", paymentRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI, {
