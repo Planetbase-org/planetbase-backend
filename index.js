@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -6,7 +7,7 @@ const router = require("./routes/AuthRoutes");
 const eventsRouter = require("./routes/EventsRoute");
 const companyRouter = require("./routes/CompanyAuthRoute");
 const bidRouter = require("./routes/BidEventRoute");
-require("dotenv").config();
+const paymentRouter = require("./routes/PaymentRoute");
 
 //Middleware
 app.use(cors());
@@ -17,9 +18,10 @@ app.use("/api/auth", router);
 app.use("/api/events", eventsRouter);
 app.use("/api/auth/company", companyRouter);
 app.use("/api/bid-event", bidRouter);
+app.use("/api/payment", paymentRouter);
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect("mongodb://localhost:27017/planetbase", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
