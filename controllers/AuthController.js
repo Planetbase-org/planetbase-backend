@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
     const token = createToken(organizer._id);
     res.status(201).json({
       success: true,
-      message: organizer,
+      organizer,
       token,
     });
   } catch (err) {
