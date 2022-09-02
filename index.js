@@ -21,7 +21,7 @@ app.use("/api/bid-event", bidRouter);
 app.use("/api/payment", paymentRouter);
 
 mongoose
-  .connect("mongodb://localhost:27017/planetbase", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
