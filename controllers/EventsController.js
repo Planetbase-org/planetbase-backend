@@ -41,6 +41,7 @@ exports.createEvent = async (req, res) => {
       eventLocation,
       sponsorshipPackage,
       price,
+      eventDesc,
       scheduledDate,
       eventImage,
     });
@@ -85,6 +86,7 @@ exports.editEvent = async (req, res) => {
     eventLocation,
     sponsorshipPackage,
     price,
+    eventDesc,
     scheduledDate,
     eventImage,
   } = req.body;
@@ -100,6 +102,7 @@ exports.editEvent = async (req, res) => {
         eventLocation,
         sponsorshipPackage,
         price,
+        eventDesc,
         scheduledDate,
         eventImage,
       }
