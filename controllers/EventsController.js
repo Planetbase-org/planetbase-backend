@@ -38,7 +38,6 @@ exports.createEvent = async (req, res) => {
       success: true,
       events,
     });
-    console.log(req.file);
   } catch (error) {
     res.status(401).json({ error });
   }
