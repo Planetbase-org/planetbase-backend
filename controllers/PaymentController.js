@@ -1,7 +1,11 @@
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
+const BidModel = require("../models/BidEventModel");
 
 exports.createPayment = async (req, res) => {
+  const id = req.params.id;
+  const bid = await BidModel.findById({ _id: id });
+  console.log(bid.bidAmount);
   const config = {
     headers: {
       Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
@@ -9,28 +13,27 @@ exports.createPayment = async (req, res) => {
   };
   const body = {
     tx_ref: uuidv4(),
-    amount: "200",
+    amount: bid.bidAmount,
     currency: "NGN",
     redirect_url: "https://www.planetbase.io",
     customer: {
-      email: "danieloloruntoba681@gmail.com",
-      phonenumber: "09077234932",
-      name: "Daniel Toba",
+      email: bid.email,
+      phonenumber: bid.phoneNumber,
+      name: bid.bidFrom,
     },
   };
   const url = "https://api.flutterwave.com/v3/payments";
   try {
-    const data = axios
+    axios
       .post(url, body, config)
       .then((response) => {
-        console.log(response);
+        const data = response.data;
+        res.status(201).json({ data });
       })
       .catch((err) => {
-        console.log(err);
+        res.status(401).json({ err });
       });
-    res.status(201).json({ data });
   } catch (err) {
-    console.error(err);
     res.status(401).json({ err });
   }
 };

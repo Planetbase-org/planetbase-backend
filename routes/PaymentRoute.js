@@ -2,5 +2,5 @@ const express = require("express");
 const { createPayment } = require("../controllers/PaymentController");
 const paymentRouter = express.Router();
 
-paymentRouter.post("/", createPayment);
+paymentRouter.post("/:id", createPayment);
 module.exports = paymentRouter;
