@@ -15,7 +15,7 @@ exports.createPayment = async (req, res) => {
     tx_ref: uuidv4(),
     amount: bid.bidAmount,
     currency: "NGN",
-    redirect_url: "https://www.planetbase.io",
+    redirect_url: "https://www.planetbase.io/success",
     customer: {
       email: bid.email,
       phonenumber: bid.phoneNumber,
