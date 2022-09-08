@@ -2,7 +2,7 @@ const BidModel = require("../models/BidEventModel");
 const OrganizerModel = require("../models/OrganizerModel");
 
 exports.createBid = async (req, res) => {
-  const { bidFrom, email, bidDate, bidAmount, bidDesc } = req.body;
+  const { bidFrom, email, bidDate, phoneNumber, bidAmount, bidDesc } = req.body;
   const id = req.params.id;
   const organizerId = await OrganizerModel.findOne({ _id: id });
   try {
@@ -11,6 +11,7 @@ exports.createBid = async (req, res) => {
       bidTo: organizerId,
       email,
       bidDate,
+      phoneNumber,
       bidAmount,
       bidDesc,
     });

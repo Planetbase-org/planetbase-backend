@@ -1,34 +1,39 @@
 const axios = require("axios");
+const { v4: uuidv4 } = require("uuid");
+const BidModel = require("../models/BidEventModel");
 
 exports.createPayment = async (req, res) => {
-  const { email } = req.body;
+  const id = req.params.id;
+  const bid = await BidModel.findById({ _id: id });
+  console.log(bid.bidAmount);
   const config = {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.SECRET_KEY}`,
+      Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
     },
   };
+  const body = {
+    tx_ref: uuidv4(),
+    amount: bid.bidAmount,
+    currency: "NGN",
+    redirect_url: "https://www.planetbase.io",
+    customer: {
+      email: bid.email,
+      phonenumber: bid.phoneNumber,
+      name: bid.bidFrom,
+    },
+  };
+  const url = "https://api.flutterwave.com/v3/payments";
   try {
     axios
-      .post(
-        "https://api.paystack.co/transaction/initialize",
-        {
-          email,
-          amount: 200000,
-        },
-        config
-      )
+      .post(url, body, config)
       .then((response) => {
-        // console.log(response.data);
         const data = response.data;
-        res.status(201).json({
-          data,
-        });
+        res.status(201).json({ data });
       })
       .catch((err) => {
         res.status(401).json({ err });
       });
-  } catch (error) {
-    res.status(401).json({ error: error.message });
+  } catch (err) {
+    res.status(401).json({ err });
   }
 };
