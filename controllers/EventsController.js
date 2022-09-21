@@ -1,17 +1,5 @@
 const EventsModel = require("../models/EventsModel");
 const OrganizerModel = require("../models/OrganizerModel");
-// const multer = require("multer");
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, callback) => {
-//     callback(null, "uploads");
-//   },
-//   filename: (req, file, callback) => {
-//     console.log(file);
-//     callback(null, file.originalname);
-//   },
-// });
-// const upload = multer({ storage });
 
 //Create an event for the organizer
 exports.createEvent = async (req, res) => {
@@ -26,6 +14,7 @@ exports.createEvent = async (req, res) => {
     eventLocation,
     sponsorshipPackage,
     price,
+    eventDesc,
     scheduledDate,
     eventImage,
   } = req.body;
@@ -41,6 +30,7 @@ exports.createEvent = async (req, res) => {
       eventLocation,
       sponsorshipPackage,
       price,
+      eventDesc,
       scheduledDate,
       eventImage,
     });
@@ -48,7 +38,6 @@ exports.createEvent = async (req, res) => {
       success: true,
       events,
     });
-    console.log(req.file);
   } catch (error) {
     res.status(401).json({ error });
   }
@@ -85,6 +74,7 @@ exports.editEvent = async (req, res) => {
     eventLocation,
     sponsorshipPackage,
     price,
+    eventDesc,
     scheduledDate,
     eventImage,
   } = req.body;
@@ -100,6 +90,7 @@ exports.editEvent = async (req, res) => {
         eventLocation,
         sponsorshipPackage,
         price,
+        eventDesc,
         scheduledDate,
         eventImage,
       }

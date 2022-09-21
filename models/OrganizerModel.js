@@ -26,7 +26,7 @@ const OrganizerSchema = new mongoose.Schema({
     minlength: 6,
   },
   productUpdates: {
-    type: String,
+    type: Boolean,
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,

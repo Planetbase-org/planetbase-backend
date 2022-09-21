@@ -16,6 +16,14 @@ const BidSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  phoneNumber: {
+    type: String,
+    required: true,
+    match: [
+      /([0-9\s\-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/,
+      "Please enter a correct format for your phone number",
+    ],
+  },
   bidAmount: {
     type: Number,
     required: true,

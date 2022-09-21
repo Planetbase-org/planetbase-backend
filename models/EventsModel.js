@@ -19,11 +19,9 @@ const EventSchema = new mongoose.Schema(
     },
     eventTags: {
       type: Array,
-      required: true,
     },
     numberOfGuests: {
       type: String,
-      required: true,
     },
     eventLocation: {
       type: String,
@@ -36,6 +34,9 @@ const EventSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: true,
+    },
+    eventDesc: {
+      type: String,
     },
     scheduledDate: {
       type: String,
