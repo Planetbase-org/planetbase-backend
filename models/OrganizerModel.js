@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const crypto = require("crypto");
 const OrganizerSchema = new mongoose.Schema({
   firstname: {
     type: String,
@@ -27,6 +28,8 @@ const OrganizerSchema = new mongoose.Schema({
   productUpdates: {
     type: Boolean,
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
 });
 
 //Signup Method
@@ -87,6 +90,18 @@ OrganizerSchema.statics.login = async function (email, password) {
     throw Error("Incorrect password!");
   }
   return organizer;
+};
+
+OrganizerSchema.methods.getResetPassToken = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  //Reset Password Expire
+  this.resetPasswordExpire = Date.now() + 10 * (60 * 1000);
+  return resetToken;
 };
 
 const OrganizerModel = mongoose.model("Organizer", OrganizerSchema);
