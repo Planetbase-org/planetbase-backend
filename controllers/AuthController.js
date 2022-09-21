@@ -1,6 +1,9 @@
 const OrganizerModel = require("../models/OrganizerModel");
 const jwt = require("jsonwebtoken");
 // const EventsModel = require("../models/EventsModel");
+const crypto = require("crypto");
+const sendEmail = require("../util/SendMail");
+const sgMail = require("@sendgrid/mail");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "4d" });
@@ -46,5 +49,106 @@ exports.login = async (req, res) => {
       success: false,
       message: err.message,
     });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const organizer = await OrganizerModel.findOne({ email });
+    if (!organizer) {
+      throw Error("User does not exist");
+    }
+    const resetToken = organizer.getResetPassToken();
+    await organizer.save();
+
+    const resetUrl = `http://localhost:7000/api/auth/resetPassword/${resetToken}`;
+    const message = `
+      <h3>Reset Password</h3>
+      <p>Please click on the link below to reset your password</p>
+      <a href="${resetUrl}" clicktracking="off">${resetUrl}</a>
+    `;
+
+    //Send email to client
+    try {
+      await sendEmail({
+        to: organizer.email,
+        subject: "Password reset",
+        text: message,
+      });
+      res.status(200).json({
+        success: true,
+        data: "Email sent",
+      });
+    } catch (error) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+
+      throw Error("Email could not be sent");
+    }
+  } catch (error) {
+    res.status(401).json({
+      error: error.message,
+    });
+  }
+};
+
+//Reset Password
+exports.resetPassword = async (req, res, next) => {
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.resetToken)
+    .digest("hex");
+
+  try {
+    const organizer = await OrganizerModel.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!organizer) {
+      next(new ErrorResponse("Invalid reset token", 400));
+    }
+    organizer.password = req.body.password;
+    organizer.resetPasswordToken = undefined;
+    organizer.resetPasswordExpire = undefined;
+
+    await organizer.save();
+    res.status(201).json({
+      success: true,
+      data: "Password has been reset",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.emailTest = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const organizer = await OrganizerModel.findOne({ email });
+    console.log(organizer);
+
+    sgMail.setApiKey(
+      "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"
+    );
+    const msg = {
+      to: "danieloloruntoba681@gmail.com", // Change to your recipient
+      from: "support@planetbase.io", // Change to your verified sender
+      subject: "Sending with SendGrid is Fun",
+      text: "and easy to do anywhere, even with Node.js",
+      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    };
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
   }
 };
