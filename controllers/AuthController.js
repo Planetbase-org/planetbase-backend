@@ -125,30 +125,5 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 exports.emailTest = async (req, res) => {
-  const { email } = req.body;
-  try {
-    const organizer = await OrganizerModel.findOne({ email });
-    console.log(organizer);
-
-    sgMail.setApiKey(
-      "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"
-    );
-    const msg = {
-      to: "danieloloruntoba681@gmail.com", // Change to your recipient
-      from: "support@planetbase.io", // Change to your verified sender
-      subject: "Sending with SendGrid is Fun",
-      text: "and easy to do anywhere, even with Node.js",
-      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-    };
-    sgMail
-      .send(msg)
-      .then(() => {
-        console.log("Email sent");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  } catch (error) {
-    res.status(401).json({ error: error.message });
-  }
+ console.log("Email");
 };
