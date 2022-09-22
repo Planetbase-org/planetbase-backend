@@ -62,7 +62,7 @@ exports.forgotPassword = async (req, res) => {
     const resetToken = organizer.getResetPassToken();
     await organizer.save();
 
-    const resetUrl = `http://localhost:5173/resetPassword/${resetToken}`;
+    const resetUrl = `https://www.planetbase.io/resetPassword/${resetToken}`;
     const message = `
       <h3>Reset Password</h3>
       <p>Please click on the link below to reset your password</p>
