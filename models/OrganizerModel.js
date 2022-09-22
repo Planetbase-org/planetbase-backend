@@ -32,6 +32,15 @@ const OrganizerSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
 });
 
+OrganizerSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
 //Signup Method
 OrganizerSchema.statics.signup = async function (
   firstname,
@@ -60,16 +69,16 @@ OrganizerSchema.statics.signup = async function (
     throw Error("Email already in use!");
   }
 
-  //Salt Password
-  const salt = await bcrypt.genSalt(10);
-  //Hash Password
-  const hash = await bcrypt.hash(password, salt);
-  //Save Organizer after hashing
+  // //Salt Password
+  // const salt = await bcrypt.genSalt(10);
+  // //Hash Password
+  // const hash = await bcrypt.hash(password, salt);
+  // //Save Organizer after hashing
   const organizer = await this.create({
     firstname,
     lastname,
     email,
-    password: hash,
+    password,
     productUpdates,
   });
   return organizer;

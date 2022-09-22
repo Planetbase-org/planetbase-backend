@@ -108,7 +108,12 @@ exports.resetPassword = async (req, res, next) => {
     });
 
     if (!organizer) {
-      throw Error("This user does not exists.");
+      throw Error(
+        "Invalid reset token",
+        res.status(400).json({
+          error: "Invalid reset token",
+        })
+      );
     }
     organizer.password = req.body.password;
     organizer.resetPasswordToken = undefined;
