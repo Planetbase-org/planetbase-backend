@@ -62,7 +62,7 @@ exports.forgotPassword = async (req, res) => {
     const resetToken = organizer.getResetPassToken();
     await organizer.save();
 
-    const resetUrl = `http://localhost:7000/api/auth/resetPassword/${resetToken}`;
+    const resetUrl = `http://localhost:5173/resetPassword/${resetToken}`;
     const message = `
       <h3>Reset Password</h3>
       <p>Please click on the link below to reset your password</p>
@@ -108,7 +108,7 @@ exports.resetPassword = async (req, res, next) => {
     });
 
     if (!organizer) {
-      next(new ErrorResponse("Invalid reset token", 400));
+      throw Error("This user does not exists.");
     }
     organizer.password = req.body.password;
     organizer.resetPasswordToken = undefined;
@@ -125,5 +125,5 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 exports.emailTest = async (req, res) => {
- console.log("Email");
+  console.log("Email");
 };
